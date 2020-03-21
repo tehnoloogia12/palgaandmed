@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="stiilid.css">
+<title>Palgaandmete otsing</title>
+<meta charset="UTF-8"> 
+</head>
+<body>
+<h1> Palgaandmete otsing</h1>
+Sisesta otsitva inimese perenimi:
+<form>
+  Perenimi:<br>
+  <input type='text' id='Perenimi'><p> 
+  <!-- inputile vajutamine kaivitab send funktsiooni -->
+  <input type='button' onclick='send()' value='search'>
+</form>
+<!-- ans on koht, kuhu handleresult paneb tulemuse -->
+<div id="ans"></div>
+
+<!-- nyyd tuleb javascripti programm tulemuste kuvamiseks -->
+<script>
+
+// funktsioon, mis pannakse kaima send nupule vajutades
+
+function send() {
+  var val,url;
+  // vota vormilt vaartus
+  //val=document.getElementById('Eesnimi').value;
+  val=document.getElementById('Perenimi').value;  
+  // pane kokku url, mis avatakse
+  // flaski jaoks oma arvutis
+  //url="http://localhost:5000/getdata?key=Eesnimi&val="+val;
+  
+  // dijkstras
+  //url="http://dijkstra.cs.ttu.ee/~kepalt/cgi-bin/serve.py?key=Eesnimi&val="+val;
+  //key2=Perenimi&val="+val2;
+  url="http://dijkstra.cs.ttu.ee/~kepalt/cgi-bin/serve.py?key=Perenimi&val="+val;
+  
+  // kysi sellelt urlilt andmeid ja kaivita handleresult
+  fetch(url, {
+    method: "get"
+  }).then(r=>r.json()).then(handleresult);
+}
+
+// funktsioon, mis pannakse kaima, kui server annab resultaadi
+// argument r on resultaat json formaadis
+
+function handleresult(r) {
+  console.log(r);
+  s="<p>";
+  // tryki r debugimiseks konsoolile
+  console.log("r:",r);
+  // tee tsykkel yle koiki ridade
+  for(var i=0; i<r.length; i++) {
+    console.log(i,r[i]);
+    var elem=r[i]; 
+    line=""
+    // tee tsykkel yle yhe rea koigi tulpade
+    for (var j=0; j<elem.length; j++) {
+      line=line+elem[j]+" "
+    }    
+    // lopetame yhe rea
+    line=line+"<br>"   
+    // liidame rea kogutulemusele    
+    s=s+line+"<p>";
+  }
+  // pane kogutulemus otse html sisse
+  document.getElementById('ans').innerHTML=s;
+}
+</script>
+</body>
+</html>

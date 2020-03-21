@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <!-- kasutame https://purecss.io/start/ -->
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Palgaandmete otsing</title>
+<meta charset="UTF-8"> 
+<style>
+    html, button, input, select, textarea,
+    .pure-g [class *= "pure-u"] {
+        /* Set your content font stack here: , Times, "Times New Roman", serif */
+        font-family: Georgia;
+    }
+    </style>
+</head>
+<body>
+<div class="pure-menu pure-menu-horizontal">
+    <a href="#" class="pure-menu-heading pure-menu-link">OTSI</a>
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item"><a href="index.html" class="pure-menu-link">Perenime järgi</a></li>
+        <li class="pure-menu-item"><a href="index-amet.html" class="pure-menu-link">Ametikoha järgi</a></li>
+		<li class="pure-menu-item"><a href="index-asutus.html" class="pure-menu-link">Asutuse järgi</a></li>
+		<li class="pure-menu-item"><a href="index-palk.html" class="pure-menu-link">Palga järgi</a></li>
+    </ul>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1-8" style="background-color:#f5f9e9"><p>
+</p></div>
+    <div class="pure-u-3-4" style="background-color:#f5f9e9"><p></p>
+ <h1> Palgaandmete otsing perenime järgi</h1>
+ <p>Käesoleval lehel kuvatakse <a href="https://www.rahandusministeerium.ee/et/riigi-personalipoliitika/personali-ja-palgastatistika">Rahandusministeeriumi</a> 
+	kodulehel avaldatud riigitöötajate palgaandmeid. </p>
+	Arvestusliku <b>Kuupalga*</b> arvutamiseks on töötaja kogu aastatulu jagatud töötatud perioodiga, 
+	nt kui inimene töötas 1.1.2018-31.12.2018 ja sai 12000 € tulu, siis tema arvestuslik kuupalk on 1000€. 
+	Kui inimene töötas 1.1.2018-30.06.2018 ja sai 12000 € tulu, siis tema arvestuslik kuupalk on 2000€. 
+	Tabelis on ainult töötajad, kes aastas töötasid rohkem kui 90 päeva ja kelle koormus oli üle 0,25.
+	<p>
+	<p>
+
+<form class="pure-form">
+  <input type='hidden' id='Eesnimi'><p> 
+  <input type='text' id='Perenimi' placeholder="perenimi">
+  <!-- inputile vajutamine kaivitab send funktsiooni -->
+  <input type='button' class="pure-button pure-button-primary" onclick='send()' value='Otsi'>
+</form>
+<!-- ans on koht, kuhu handleresult paneb tulemuse -->
+	<div id="ans"></div>
+	</div>
+		<div class="pure-u-1-8" style="background:#f5f9e9"<p>
+	</div>
+
+</div>
+
+<!-- nyyd tuleb javascripti programm tulemuste kuvamiseks -->
+<script>
+
+// funktsioon, mis pannakse kaima send nupule vajutades
+
+function send() {
+  var val,url;
+  // vota vormilt vaartus
+  val=document.getElementById('Perenimi').value;  
+  url="http://dijkstra.cs.ttu.ee/~kepalt/cgi-bin/serve.py?key=Perenimi&val="+val;
+  
+  // kysi sellelt urlilt andmeid ja kaivita handleresult
+  fetch(url, {
+    method: "get"
+  }).then(r=>r.json()).then(handleresult);
+}
+
+// funktsioon, mis pannakse kaima, kui server annab resultaadi
+// argument r on resultaat json formaadis
+
+
+function handleresult(r) {
+  console.log(r);
+  //s="<p>";
+  s="<table  class='pure-table pure-table-horizontal'><thead><tr><th>Perenimi</th><th>Eesnimi</th><th>Asutus</th><th>Ametikoht</th><th>Aasta</th><th>Kuupalk*</th></tr></thead>";
+  // tryki r debugimiseks konsoolile
+  console.log("r:",r);
+  // tee tsykkel yle koiki ridade
+  for(var i=0; i<r.length; i++) {
+    console.log(i,r[i]);
+    var elem=r[i];
+    line=""
+    // tee tsykkel yle yhe rea koigi tulpade
+    for (var j=0; j<elem.length; j++) {
+      //line=line+elem[j]+" "
+      line=line+"<td>"+elem[j]+"</td>"
+    }
+    // lopetame yhe rea
+    //line=line+"<br>"
+    line="<tr>"+line+"</tr>"
+    // liidame rea kogutulemusele
+    //s=s+line+"<p>";
+    s=s+line;
+  }
+  s=s+"</table>"
+  // pane kogutulemus otse html sisse
+  document.getElementById('ans').innerHTML=s;
+}
+
+
+</script>
+
+</body>
+</html>
