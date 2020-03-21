@@ -62,8 +62,9 @@ function send() {
   var val,url;
   // vota vormilt vaartus
   val=document.getElementById('Perenimi').value;  
-  url="http://dijkstra.cs.ttu.ee/~kepalt/cgi-bin/serve.py?key=Perenimi&val="+val;
-  
+  //url="http://dijkstra.cs.ttu.ee/~kepalt/cgi-bin/serve.py?key=Perenimi&val="+val;
+  url="http://64.225.67.129/palgaandmed/cgi-bin/serve.py?key=Perenimi&val="+val;
+	
   // kysi sellelt urlilt andmeid ja kaivita handleresult
   fetch(url, {
     method: "get"
